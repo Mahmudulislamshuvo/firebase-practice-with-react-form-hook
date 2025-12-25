@@ -60,7 +60,7 @@ const Register = () => {
 
   console.log(errors);
 
-  const onSubmit = async (data) => {
+  const onSubmitHandle = async (data) => {
     setSubmitLoading(true);
     try {
       const user = await registerWithEmailAndPassword(
@@ -129,7 +129,10 @@ const Register = () => {
           </div>
         </div>
 
-        <form className="mt-4 space-y-4" onSubmit={handleFormSubmit(onSubmit)}>
+        <form
+          className="mt-4 space-y-4"
+          onSubmit={handleFormSubmit(onSubmitHandle)}
+        >
           <div className="space-y-4">
             {/* Name Input */}
             <div className="relative">

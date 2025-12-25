@@ -1,37 +1,60 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginWithEmailAndPassword, registerWithGmail } from "../firebase"; // registerWithGmail ইম্পোর্ট করা হয়েছে
+import { loginWithEmailAndPassword, registerWithGmail } from "../firebase";
+import { useForm } from "react-hook-form";
+import ErrorMessage from "../CommonCompo/ErrorMessage";
 
 const Login = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [loginCreadentials, setLoginCredentials] = useState({
-    email: "",
-    password: "",
-  });
+  // const [loginCreadentials, setLoginCredentials] = useState({
+  //   email: "",
+  //   password: "",
+  // });
   const [loading, setLoading] = useState(false);
 
-  const handleLoginDataChange = (e) => {
-    setLoginCredentials({
-      ...loginCreadentials,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleLoginDataChange = (e) => {
+  //   setLoginCredentials({
+  //     ...loginCreadentials,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
-  const handleLoginWithEmailAndPassword = async () => {
-    const { email, password } = loginCreadentials;
+  // TODO: login with react form hook
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm();
+
+  // Email and Password Login Handler
+  const handleLogin = async (data) => {
     setLoading(true);
     try {
-      const user = await loginWithEmailAndPassword(email, password);
+      const user = await loginWithEmailAndPassword(data.email, data.password);
       console.log("Logged user", user);
       navigate("/dashboard");
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
   };
+
+  // const handleLoginWithEmailAndPassword = async () => {
+  //   const { email, password } = loginCreadentials;
+  //   setLoading(true);
+  //   try {
+  //     const user = await loginWithEmailAndPassword(email, password);
+  //     console.log("Logged user", user);
+  //     navigate("/dashboard");
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   // google login handler
   const handleGoogleSignIn = async () => {
@@ -98,7 +121,7 @@ const Login = () => {
           </div>
         </div>
 
-        <form className="mt-4 space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form className="mt-4 space-y-6" onSubmit={handleSubmit(handleLogin)}>
           <div className="space-y-4">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -107,13 +130,25 @@ const Login = () => {
               <input
                 name="email"
                 type="email"
-                required
-                value={loginCreadentials.email}
-                onChange={handleLoginDataChange}
+                // required
+                // value={loginCreadentials.email}
+                // onChange={handleLoginDataChange}
                 className="appearance-none block w-full pl-10 pr-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
                 placeholder="Email address"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: "Invalid email address",
+                  },
+                  maxLength: {
+                    value: 40,
+                    message: "Email cannot exceed 40 characters",
+                  },
+                })}
               />
             </div>
+            {errors.email && <ErrorMessage message={errors.email?.message} />}
 
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -122,11 +157,19 @@ const Login = () => {
               <input
                 name="password"
                 type={showPassword ? "text" : "password"}
-                required
-                value={loginCreadentials.password}
-                onChange={handleLoginDataChange}
+                // required
+                // value={loginCreadentials.password}
+                // onChange={handleLoginDataChange}
                 className="appearance-none block w-full pl-10 pr-10 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-colors"
                 placeholder="Password"
+                {...register("password", {
+                  required: "Password is required",
+                  maxLength: { value: 80, message: "Password is too long" },
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
+                })}
               />
               <button
                 type="button"
@@ -140,6 +183,13 @@ const Login = () => {
                 )}
               </button>
             </div>
+            {errors.password && (
+              <ErrorMessage
+                message={
+                  errors.password?.message ? errors.password?.message : ""
+                }
+              />
+            )}
           </div>
 
           <div className="flex items-center justify-between">
@@ -169,7 +219,7 @@ const Login = () => {
 
           <button
             type="submit"
-            onClick={handleLoginWithEmailAndPassword}
+            // onClick={handleLoginWithEmailAndPassword}
             disabled={loading}
             className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
               loading ? "bg-indigo-400" : "bg-indigo-600 hover:bg-indigo-700"
