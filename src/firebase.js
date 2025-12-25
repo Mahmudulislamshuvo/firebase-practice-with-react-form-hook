@@ -86,4 +86,5 @@ export {
   loginWithEmailAndPassword,
   loginWithGmail,
   resetPassword,
+  auth,
 };

@@ -11,9 +11,13 @@ import {
   BarChart2,
   ArrowRight,
 } from "lucide-react";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -25,6 +29,18 @@ const Dashboard = () => {
     { icon: BarChart2, label: "Analytics", active: false },
     { icon: Settings, label: "Settings", active: false },
   ];
+
+  // Handle LogOut
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        console.log("User signed out");
+        navigate("login");
+      })
+      .catch((error) => {
+        console.error("Sign out error", error);
+      });
+  };
 
   return (
     <div className="flex h-screen bg-slate-50">
@@ -72,7 +88,10 @@ const Dashboard = () => {
         </nav>
 
         <div className="absolute bottom-0 w-full p-4 border-t border-slate-800">
-          <button className="flex items-center w-full px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors">
+          <button
+            onClick={handleLogout}
+            className="flex items-center w-full px-4 py-3 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors"
+          >
             <LogOut size={20} className="mr-3" />
             <span className="font-medium">Logout</span>
           </button>
