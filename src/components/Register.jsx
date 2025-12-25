@@ -41,7 +41,9 @@ const Register = () => {
     try {
       const user = await registerWithGmail();
       console.log("Logged in user:", user);
-      navigate("/dashboard");
+      if (user) {
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.log(error);
     }

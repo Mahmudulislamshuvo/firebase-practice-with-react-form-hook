@@ -61,8 +61,18 @@ const loginWithEmailAndPassword = async (email, password) => {
   }
 };
 
+const loginWithGmail = async () => {
+  try {
+    const response = await signInWithPopup(auth, googleProvider);
+    return response.user;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export {
   registerWithEmailAndPassword,
   registerWithGmail,
   loginWithEmailAndPassword,
+  loginWithGmail,
 };
