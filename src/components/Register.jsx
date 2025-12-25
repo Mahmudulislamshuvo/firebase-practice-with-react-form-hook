@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerWithEmailAndPassword, registerWithGmail } from "../firebase";
 import { useForm } from "react-hook-form";
+import ErrorMessage from "../CommonCompo/ErrorMessage";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,7 +38,7 @@ const Register = () => {
   //   }
   // };
 
-  // Google Register Handler
+  //TODO: Google Register Handler
   const handleGoogleRegister = async () => {
     try {
       const user = await registerWithGmail();
@@ -51,7 +52,13 @@ const Register = () => {
   };
 
   // TODO: add react hook form for validation
-  const { register, handleSubmit: handleFormSubmit } = useForm();
+  const {
+    register,
+    handleSubmit: handleFormSubmit,
+    formState: { errors },
+  } = useForm();
+
+  console.log(errors);
 
   const onSubmit = async (data) => {
     setSubmitLoading(true);
@@ -132,14 +139,18 @@ const Register = () => {
               <input
                 name="name"
                 type="text"
-                required
+                // required
                 // value={formData.name}
                 // onChange={handleFromChange}
                 className="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-all"
                 placeholder="Full Name"
-                {...register("name", { required: true, maxLength: 80 })}
+                {...register("name", {
+                  required: "Name is required",
+                  maxLength: { value: 80, message: "Name is too long" },
+                })}
               />
             </div>
+            {errors.name && <ErrorMessage message={errors.name.message} />}
 
             {/* Email Input */}
             <div className="relative">
@@ -149,11 +160,10 @@ const Register = () => {
               <input
                 name="email"
                 type="email"
-                required
                 // value={formData.email}
                 // onChange={handleFromChange}
                 {...register("email", {
-                  required: true,
+                  required: "Email is required",
                   pattern: /^\S+@\S+$/i,
                   maxLength: 100,
                 })}
@@ -161,6 +171,7 @@ const Register = () => {
                 placeholder="Email address"
               />
             </div>
+            {errors.email && <ErrorMessage message={errors.email.message} />}
 
             {/* Password Input */}
             <div className="relative">
@@ -170,17 +181,20 @@ const Register = () => {
               <input
                 name="password"
                 type={showPassword ? "text" : "password"}
-                required
                 // value={formData.password}
                 // onChange={handleFromChange}
                 {...register("password", {
-                  required: true,
-                  maxLength: 80,
-                  minLength: 8,
+                  required: "Password is required",
+                  maxLength: { value: 80, message: "Password is too long" },
+                  minLength: {
+                    value: 8,
+                    message: "Password must be at least 8 characters",
+                  },
                 })}
                 className="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-all"
                 placeholder="Password"
               />
+
               <div
                 className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
@@ -192,6 +206,9 @@ const Register = () => {
                 )}
               </div>
             </div>
+            {errors.password && (
+              <ErrorMessage message={errors.password.message} />
+            )}
           </div>
 
           <button
