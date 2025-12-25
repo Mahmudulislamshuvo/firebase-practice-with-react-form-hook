@@ -11,31 +11,34 @@
 
 ## ✨ Key Features
 
-*   **Secure Authentication:** Complete email/password registration and login flows.
-*   **Social Integration:** One-tap Google Sign-In via Firebase Popup/Redirect.
-*   **Advanced Form Handling:** Refactored from manual state to **React Hook Form** for performance and maintainability.
-*   **Robust Validation:** Real-time field validation (Regex patterns, min/max length, required fields).
-*   **Protected Routes:** Higher-order component pattern to secure the Dashboard and private pages.
-*   **Modern UI/UX:** Clean, SaaS-style interface using Tailwind CSS and Lucide Icons.
-*   **Responsive Design:** Fully adaptive layout for mobile, tablet, and desktop.
+- **Secure Authentication:** Complete email/password registration and login flows.
+- **Social Integration:** One-tap Google Sign-In via Firebase Popup/Redirect.
+- **Advanced Form Handling:** Refactored from manual state to **React Hook Form** for performance and maintainability.
+- **Robust Validation:** Real-time field validation (Regex patterns, min/max length, required fields).
+- **Protected Routes:** Higher-order component pattern to secure the Dashboard and private pages.
+- **Modern UI/UX:** Clean, SaaS-style interface using Tailwind CSS and Lucide Icons.
+- **Responsive Design:** Fully adaptive layout for mobile, tablet, and desktop.
 
 ---
 
 ## 🛠 Tech Stack
 
 ### **Frontend Core**
-*   **React 19:** Utilizing the latest functional component patterns and hooks.
-*   **Vite:** For lightning-fast development server and optimized build bundling.
-*   **React Router Dom v7:** managing dynamic routing and protected navigation guards.
+
+- **React 19:** Utilizing the latest functional component patterns and hooks.
+- **Vite:** For lightning-fast development server and optimized build bundling.
+- **React Router Dom v7:** managing dynamic routing and protected navigation guards.
 
 ### **Styling & UI**
-*   **Tailwind CSS:** Utility-first CSS for rapid, scalable design.
-*   **Lucide React:** Beautiful, consistent, and lightweight icon set.
+
+- **Tailwind CSS:** Utility-first CSS for rapid, scalable design.
+- **Lucide React:** Beautiful, consistent, and lightweight icon set.
 
 ### **State & Authentication**
-*   **Firebase Auth:** Backend-as-a-Service for secure identity management.
-*   **React Hook Form:** For managing form state, validation, and error handling without unnecessary re-renders.
-*   **React Firebase Hooks:** Simplified hooks for integrating Firebase listeners.
+
+- **Firebase Auth:** Backend-as-a-Service for secure identity management.
+- **React Hook Form:** For managing form state, validation, and error handling without unnecessary re-renders.
+- **React Firebase Hooks:** Simplified hooks for integrating Firebase listeners.
 
 ---
 
@@ -44,16 +47,20 @@
 This project was built in two distinct phases to emulate a real-world refactoring process:
 
 ### **Phase 1: The "Manual" Approach**
+
 Initially, forms were built using standard React `useState` hooks for every input field. While functional, this approach led to:
-*   Excessive re-renders on every keystroke.
-*   Complex, manual validation logic (nested `if/else` statements).
-*   Boilerplate-heavy code that was hard to scale.
+
+- Excessive re-renders on every keystroke.
+- Complex, manual validation logic (nested `if/else` statements).
+- Boilerplate-heavy code that was hard to scale.
 
 ### **Phase 2: The "Professional" Refactor (Current State)**
+
 The codebase was migrated to **React Hook Form**. This transition achieved:
-*   **Performance:** Inputs are now uncontrolled components, eliminating re-renders.
-*   **Scalability:** Validation rules are declarative and easy to extend.
-*   **DX (Developer Experience):** Cleaner code with `register` and `handleSubmit` patterns, separating UI from logic.
+
+- **Performance:** Inputs are now uncontrolled components, eliminating re-renders.
+- **Scalability:** Validation rules are declarative and easy to extend.
+- **DX (Developer Experience):** Cleaner code with `register` and `handleSubmit` patterns, separating UI from logic.
 
 ---
 
@@ -83,17 +90,20 @@ src/
 Follow these steps to run the project locally.
 
 ### 1. Clone the repository
+
 ```bash
-git clone https://github.com/yourusername/firebase-auth-master.git
-cd firebase-auth-master
+git clone https://github.com/Mahmudulislamshuvo/firebase-practice-with-react-form-hook
+cd firebasePractice
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Configure Environment Variables
+
 Create a `.env` file in the root directory. You must obtain these credentials from your [Firebase Console](https://console.firebase.google.com/).
 
 ```env
@@ -106,9 +116,11 @@ VITE_appId=your_app_id
 ```
 
 ### 4. Run Development Server
+
 ```bash
 npm run dev
 ```
+
 Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 
 ---
@@ -120,6 +132,7 @@ This project is open-source and available under the **MIT License**.
 ---
 
 ### Acknowledgements
-*   [Unsplash](https://unsplash.com) for placeholder photography.
-*   [Lucide](https://lucide.dev) for the icon library.
-*   [Tailwind CSS](https://tailwindcss.com) for the design system.
+
+- [Unsplash](https://unsplash.com) for placeholder photography.
+- [Lucide](https://lucide.dev) for the icon library.
+- [Tailwind CSS](https://tailwindcss.com) for the design system.
