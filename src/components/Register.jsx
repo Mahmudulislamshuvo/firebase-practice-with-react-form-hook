@@ -2,39 +2,40 @@ import { User, Mail, Lock, ArrowRight, EyeOff, Eye } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { registerWithEmailAndPassword, registerWithGmail } from "../firebase";
+import { useForm } from "react-hook-form";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   email: "",
+  //   password: "",
+  // });
 
   const [submitLoading, setSubmitLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleFromChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // const handleFromChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Form submission safety
-    setSubmitLoading(true);
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault(); // Form submission safety
+  //   setSubmitLoading(true);
 
-    const { email, password } = formData;
-    try {
-      const user = await registerWithEmailAndPassword(email, password);
-      console.log(user);
+  //   const { email, password } = formData;
+  //   try {
+  //     const user = await registerWithEmailAndPassword(email, password);
+  //     console.log(user);
 
-      setFormData({ name: "", email: "", password: "" });
-      navigate("/login");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setSubmitLoading(false);
-    }
-  };
+  //     setFormData({ name: "", email: "", password: "" });
+  //     navigate("/login");
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setSubmitLoading(false);
+  //   }
+  // };
 
   // Google Register Handler
   const handleGoogleRegister = async () => {
@@ -46,6 +47,26 @@ const Register = () => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  // TODO: add react hook form for validation
+  const { register, handleSubmit: handleFormSubmit } = useForm();
+
+  const onSubmit = async (data) => {
+    setSubmitLoading(true);
+    try {
+      const user = await registerWithEmailAndPassword(
+        data.email,
+        data.password
+      );
+      console.log(user);
+
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setSubmitLoading(false);
     }
   };
 
@@ -101,7 +122,7 @@ const Register = () => {
           </div>
         </div>
 
-        <form className="mt-4 space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="mt-4 space-y-4" onSubmit={handleFormSubmit(onSubmit)}>
           <div className="space-y-4">
             {/* Name Input */}
             <div className="relative">
@@ -112,10 +133,11 @@ const Register = () => {
                 name="name"
                 type="text"
                 required
-                value={formData.name}
-                onChange={handleFromChange}
+                // value={formData.name}
+                // onChange={handleFromChange}
                 className="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-all"
                 placeholder="Full Name"
+                {...register("name", { required: true, maxLength: 80 })}
               />
             </div>
 
@@ -128,8 +150,13 @@ const Register = () => {
                 name="email"
                 type="email"
                 required
-                value={formData.email}
-                onChange={handleFromChange}
+                // value={formData.email}
+                // onChange={handleFromChange}
+                {...register("email", {
+                  required: true,
+                  pattern: /^\S+@\S+$/i,
+                  maxLength: 100,
+                })}
                 className="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-all"
                 placeholder="Email address"
               />
@@ -144,8 +171,13 @@ const Register = () => {
                 name="password"
                 type={showPassword ? "text" : "password"}
                 required
-                value={formData.password}
-                onChange={handleFromChange}
+                // value={formData.password}
+                // onChange={handleFromChange}
+                {...register("password", {
+                  required: true,
+                  maxLength: 80,
+                  minLength: 8,
+                })}
                 className="block w-full pl-10 pr-3 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-all"
                 placeholder="Password"
               />
@@ -164,7 +196,7 @@ const Register = () => {
 
           <button
             type="submit"
-            onClick={handleSubmit}
+            // onClick={handleSubmit}
             disabled={submitLoading}
             className={`group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white ${
               submitLoading
