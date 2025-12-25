@@ -1,8 +1,24 @@
-import React from 'react';
-import { Mail, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Mail, ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { resetPassword } from "../firebase";
 
 const ForgotPassword = () => {
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleResetPassword = async () => {
+    setLoading(true);
+    try {
+      const res = await resetPassword(email);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
@@ -28,6 +44,8 @@ const ForgotPassword = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 required
                 className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors"
                 placeholder="Email address"
@@ -38,14 +56,18 @@ const ForgotPassword = () => {
           <div>
             <button
               type="submit"
+              onClick={handleResetPassword}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform hover:-translate-y-0.5 shadow-md hover:shadow-lg"
             >
-              Send Reset Link
+              {loading ? "Sending..." : "Send Reset Link"}
             </button>
           </div>
 
           <div className="text-center">
-            <Link to="/login" className="flex items-center justify-center font-medium text-slate-600 hover:text-slate-800 transition-colors">
+            <Link
+              to="/login"
+              className="flex items-center justify-center font-medium text-slate-600 hover:text-slate-800 transition-colors"
+            >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Login
             </Link>

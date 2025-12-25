@@ -6,6 +6,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -70,9 +71,19 @@ const loginWithGmail = async () => {
   }
 };
 
+const resetPassword = async (email) => {
+  try {
+    const response = await sendPasswordResetEmail(auth, email);
+    return response;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 export {
   registerWithEmailAndPassword,
   registerWithGmail,
   loginWithEmailAndPassword,
   loginWithGmail,
+  resetPassword,
 };
