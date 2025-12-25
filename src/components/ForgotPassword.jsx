@@ -2,15 +2,21 @@ import { Mail, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { resetPassword } from "../firebase";
+import ErrorMessage from "../CommonCompo/ErrorMessage";
+import { useForm } from "react-hook-form";
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleResetPassword = async () => {
+  const handleResetPassword = async (data) => {
     setLoading(true);
     try {
-      const res = await resetPassword(email);
+      const res = await resetPassword(data.email);
       console.log(res);
     } catch (error) {
       console.log(error);
@@ -30,7 +36,10 @@ const ForgotPassword = () => {
             Enter your email and we'll send you a link to reset your password.
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={(e) => e.preventDefault()}>
+        <form
+          className="mt-8 space-y-6"
+          onSubmit={handleSubmit(handleResetPassword)}
+        >
           <div>
             <label htmlFor="email-address" className="sr-only">
               Email address
@@ -44,13 +53,17 @@ const ForgotPassword = () => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                required
+                // onChange={(e) => setEmail(e.target.value)}
+                // value={email}
+                // required
                 className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-slate-300 placeholder-slate-500 text-slate-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm transition-colors"
                 placeholder="Email address"
+                {...register("email", {
+                  required: "Email is required",
+                })}
               />
             </div>
+            {errors.email && <ErrorMessage message={errors.email.message} />}
           </div>
 
           <div>
